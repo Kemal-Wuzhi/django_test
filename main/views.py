@@ -7,19 +7,18 @@ from django.http import HttpResponse
 
 from django.views import View
 from django import forms
-from django.core.validators import EmailValidator
+# from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
 
 from .models import Campaign
 
-class EmailLoginForm(forms.Form):
-    email = forms.EmailField(
-        label=_("Email"),
+class UserLoginForm(forms.Form):
+    user = forms.CharField(
+        label=_("User"),
         required=True,
-        validators=[EmailValidator()],
-        widget=forms.EmailInput(
-            attrs={'class': 'form-control', 'placeholder': _('Email')})
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': _('User')})
     )
     password = forms.CharField(
         label=_("Password"),
@@ -30,13 +29,13 @@ class EmailLoginForm(forms.Form):
 
 class LogInView(FormView):
     template_name = "user_login.html"
-    form_class = EmailLoginForm
+    form_class = UserLoginForm
 
     def form_valid(self, form):
-        email = form.cleaned_data['email']
+        user_name = form.cleaned_data['user']
         password = form.cleaned_data['password']
 
-        user = authenticate(self.request, username=email, password=password)
+        user = authenticate(self.request, username=user_name, password=password)
 
         if user is not None:
             login(self.request, user)
@@ -47,7 +46,7 @@ class LogInView(FormView):
                 return redirect(redirect_to)
             return redirect(settings.LOGIN_REDIRECT_URL)
         else:
-            form.add_error(None, _("Invalid email or password"))
+            form.add_error(None, _("Invalid user or password"))
             return self.form_invalid(form)
 
     def form_invalid(self, form):
