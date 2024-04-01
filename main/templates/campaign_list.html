@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>活動列表</title>
+    <style>
+    </style>
 </head>
 <body>
     <h1>活動列表</h1>
     <ul>
         {% for campaign in campaigns %}
             <li>
-                {{ campaign.title活動名稱 }} -
-                <a href="{% url 'modify_campaign' id=campaign.uid %}">修改</a> |
-                <a href="{% url 'delete_campaign' id=campaign.uid %}" onclick="return confirm('確認刪除?');">刪除</a>
+                <strong>{{ campaign.Title }}</strong> - 
+                <em>{{ campaign.StartDate }} 至 {{ campaign.EndDate }}</em><br>
+                <img src="{{ campaign.ImageURL }}" alt="活動圖片" class="campaign-image"><br>
+                <p>點閱數: {{ campaign.HitRate }}</p>
             </li>
         {% endfor %}
     </ul>
