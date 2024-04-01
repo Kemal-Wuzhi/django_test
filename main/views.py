@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render,get_object_or_404
-from django.utils.http import url_has_allowed_host_and_scheme as is_safe_url
+# from django.utils.http import url_has_allowed_host_and_scheme as is_safe_url
 from django.views.generic import FormView
 from django.http import HttpResponse
-
+from django.urls import reverse
 from django.views import View
 from django import forms
 # from django.core.validators import EmailValidator
@@ -39,12 +39,14 @@ class LogInView(FormView):
 
         if user is not None:
             login(self.request, user)
-            redirect_to = self.request.POST.get(settings.REDIRECT_FIELD_NAME, '')
-            url_is_safe = is_safe_url(redirect_to, allowed_hosts=self.request.get_host(), require_https=self.request.is_secure())
+            return redirect(reverse('campaign_list'))
+            # TODO: login authentication
+            # redirect_to = self.request.POST.get(settings.REDIRECT_FIELD_NAME, '')
+            # url_is_safe = is_safe_url(redirect_to, allowed_hosts=self.request.get_host(), require_https=self.request.is_secure())
 
-            if url_is_safe:
-                return redirect(redirect_to)
-            return redirect(settings.LOGIN_REDIRECT_URL)
+            # if url_is_safe:
+            #     return redirect(redirect_to)
+            # return redirect(settings.LOGIN_REDIRECT_URL)
         else:
             form.add_error(None, _("Invalid user or password"))
             return self.form_invalid(form)
@@ -62,7 +64,7 @@ class DeleteCampaignView(View):
 class QueryCampaignView(View):
     def get(self, request, *args, **kwargs):
         campaigns = Campaign.objects.all()
-        return render(request, 'campaigns_list.html', {'campaigns': campaigns})
+        return render(request, 'campaign_list.html', {'campaigns': campaigns})
 
 class ModifyCampaignView(View):
     def post(self, request, *args, **kwargs):
