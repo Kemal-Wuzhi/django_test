@@ -1,39 +1,65 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% trans 'Log in' %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSLUWVW3NVGjNV0uDBsJ5F4CwNsaP4DHiTtN6t" crossorigin="anonymous">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
     <div class="container mt-5">
-        <h4>{% trans 'Log in' %}</h4>
+      <h4>{% trans 'Log in' %}</h4>
 
-        <form method="post" action="{% url 'user_login' %}"> 
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="id_user">{% trans 'User' %}</label>
-                <input type="user" name="user" id="id_user" class="form-control" placeholder="{% trans 'User' %}">
-            </div>
+      <form method="post" action="{% url 'user_login' %}">
+        {% csrf_token %}
 
-            <div class="form-group">
-                <label for="id_password">{% trans 'Password' %}</label>
-                <input type="password" name="password" id="id_password" class="form-control" placeholder="{% trans 'Password' %}">
-            </div>
+        <div class="form-group">
+          <label for="id_user">{% trans 'User' %}</label>
+          <input
+            type="user"
+            name="user"
+            id="id_user"
+            class="form-control"
+            placeholder="{% trans 'User' %}"
+          />
+        </div>
 
-            <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
-        </form>
+        <div class="form-group">
+          <label for="id_password">{% trans 'Password' %}</label>
+          <input
+            type="password"
+            name="password"
+            id="id_password"
+            class="form-control"
+            placeholder="{% trans 'Password' %}"
+          />
+        </div>
 
-        <hr>
+        <button type="submit" class="btn btn-primary">
+          {% trans 'Log in' %}
+        </button>
+      </form>
 
+      <hr />
     </div>
 
     <!-- Bootstrap JS, Popper.js and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js" integrity="sha384-S5Zg69x2neZtkgrCT3hoftY4Pttu/9wLC/rmJG2RJjEIII3bNiylWy3Tl2yGW6KV" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy4Ck4SOF4y4Ck4C2DgHfViXydVeLm+JDM" crossorigin="anonymous"></script>
-</body>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
