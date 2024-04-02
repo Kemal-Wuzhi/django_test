@@ -4,6 +4,51 @@
     <meta charset="UTF-8">
     <title>活動列表</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .campaign-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        p, em {
+            margin: 5px 0;
+        }
+
+        strong {
+            color: #007bff;
+        }
+
+        em {
+            color: #28a745;
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
@@ -11,10 +56,14 @@
     <ul>
         {% for campaign in campaigns %}
             <li>
-                <strong>{{ campaign.Title }}</strong> - 
-                <em>{{ campaign.StartDate }} 至 {{ campaign.EndDate }}</em><br>
-                <img src="{{ campaign.ImageURL }}" alt="活動圖片" class="campaign-image"><br>
-                <p>點閱數: {{ campaign.HitRate }}</p>
+                <strong>{{ campaign.title }}</strong>
+                <p>版本: {{ campaign.version }}</p>
+                <div>活動描述: {{ campaign.description_html|safe }}</div>
+                <img src="{{ campaign.image_url }}" alt="活動圖片" class="campaign-image">
+                <p>註解: {{ campaign.comment }}</p>
+                <em>{{ campaign.start_date }} 至 {{ campaign.end_date }}</em><br>
+                <p>修改日期: {{ campaign.edit_modify_date }}</p>
+                <p>點閱數: {{ campaign.hit_rate }}</p>
             </li>
         {% endfor %}
     </ul>
