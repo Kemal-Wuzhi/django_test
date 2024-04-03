@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
-from django.shortcuts import redirect, render,get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 # from django.utils.http import url_has_allowed_host_and_scheme as is_safe_url
 from django.views.generic import FormView
 from django.http import HttpResponse
@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Campaign
 from django.db import connection
 from dao import insert_campaign_data
+
 
 class UserLoginForm(forms.Form):
     user = forms.CharField(
@@ -28,6 +29,7 @@ class UserLoginForm(forms.Form):
         required=True
     )
 
+
 class LogInView(FormView):
     template_name = "user_login.html"
     form_class = UserLoginForm
@@ -36,7 +38,8 @@ class LogInView(FormView):
         user_name = form.cleaned_data['user']
         password = form.cleaned_data['password']
 
-        user = authenticate(self.request, username=user_name, password=password)
+        user = authenticate(
+            self.request, username=user_name, password=password)
 
         if user is not None:
             login(self.request, user)
@@ -55,6 +58,7 @@ class LogInView(FormView):
     def form_invalid(self, form):
         return render(self.request, self.template_name, {'form': form})
 
+
 class DeleteCampaignView(View):
     def get(self, request, *args, **kwargs):
         campaign_id = kwargs.get('id')
@@ -62,22 +66,22 @@ class DeleteCampaignView(View):
         campaign.delete()
         return HttpResponse(f"活動 {campaign_id} 已被刪除")
 
+
 class QueryCampaignView(View):
     def get(self, request, *args, **kwargs):
-        file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"  
+        file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"
         insert_campaign_data(file_path)
         print("Data inserted!")
 
         campaigns = Campaign.objects.all()
         return render(request, 'campaign_list.html', {'campaigns': campaigns})
 
+
 class ModifyCampaignView(View):
     def post(self, request, *args, **kwargs):
         campaign_id = kwargs.get('id')
         campaign = get_object_or_404(Campaign, uid=campaign_id)
-        new_title = request.POST.get('title', campaign.title活動名稱)
-        campaign.title活動名稱 = new_title
+        new_title = request.POST.get('title', campaign.title)
+        campaign.title = new_title
         campaign.save()
         return HttpResponse(f"活動 {campaign_id} 的標題已更新為 {new_title}")
-
-
