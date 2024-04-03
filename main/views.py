@@ -10,8 +10,9 @@ from django import forms
 # from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
-
 from .models import Campaign
+from django.db import connection
+from dao import insert_campaign_data
 
 class UserLoginForm(forms.Form):
     user = forms.CharField(
@@ -63,6 +64,10 @@ class DeleteCampaignView(View):
 
 class QueryCampaignView(View):
     def get(self, request, *args, **kwargs):
+        file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"  
+        insert_campaign_data(file_path)
+        print("Data inserted!")
+
         campaigns = Campaign.objects.all()
         return render(request, 'campaign_list.html', {'campaigns': campaigns})
 
@@ -74,3 +79,5 @@ class ModifyCampaignView(View):
         campaign.title活動名稱 = new_title
         campaign.save()
         return HttpResponse(f"活動 {campaign_id} 的標題已更新為 {new_title}")
+
+
