@@ -10,11 +10,13 @@ def insert_campaign_data(file_path):
         with open(file_path, 'r') as file:
             campaigns = json.load(file)
             print("CAMPAIGNS:", campaigns)
+
             for c in campaigns:
+                print("DES:", c.get('descriptionFilterHtml'))
                 campaign = Campaign.objects.create(
                     version=c.get('version'),
                     title=c.get('title'),
-                    description_html=c.get('description_html'),
+                    description_html=c.get('descriptionFilterHtml'),
                     image_url=c.get('image_url'),
                     comment=c.get('comment'),
                     start_date=c.get('start_date'),
