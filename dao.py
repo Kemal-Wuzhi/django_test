@@ -10,75 +10,97 @@ def insert_campaign_data(file_path):
     from main.models import Campaign, CampaignLocationInfo, Category, Ticket, Unit, Website, CampaignUnitRelation
     try:
         with open(file_path, 'r') as file:
-            campaigns = json.load(file)
-            print("CAMPAIGNS:", campaigns)
+            show_data = json.load(file)
+            print("CAMPAIGNS:", show_data)
 
-            for c in campaigns:
+        for c in show_data:
+            # handle datetime formate, strpt = string parse time strft = string formate time
+            start_d_object = datetime.strptime(c['startDate'], '%Y/%m/%d')
+            end_d_object = datetime.strptime(c['endDate'], '%Y/%m/%d')
+            correct_start = start_d_object.strftime("%Y-%m-%d")
+            correct_end = end_d_object.strftime("%Y-%m-%d")
+            c['startDate'] = correct_start
+            c['endDate'] = correct_end
 
-                # handle datetime formate, strpt = string parse time strft = string formate time
-                start_d_object = datetime.strptime(c['startDate'], '%Y/%m/%d')
-                end_d_object = datetime.strptime(c['endDate'], '%Y/%m/%d')
-                correct_start = start_d_object.strftime("%Y-%m-%d")
-                correct_end = end_d_object.strftime("%Y-%m-%d")
-                c['startDate'] = correct_start
-                c['endDate'] = correct_end
+            campaign, created = Campaign.objects.get_or_create(
+                uid=c['UID'],
+                defaults={
+                    'version': c.get('version'),
+                    'title': c.get('title'),
+                    'description_html': c.get('descriptionFilterHtml'),
+                    'image_url': c.get('imageUrl'),
+                    'comment': c.get('comment'),
+                    'start_date': c.get('startDate'),
+                    'end_date': c.get('endDate'),
+                    'hit_rate': c.get('hitRate'),
+                }
 
-                campaign = Campaign.objects.create(
-                    version=c.get('version'),
-                    title=c.get('title'),
-                    description_html=c.get('descriptionFilterHtml'),
-                    image_url=c.get('imageUrl'),
-                    comment=c.get('comment'),
-                    start_date=c.get('startDate'),
-                    end_date=c.get('endDate'),
-                    hit_rate=c.get('hitRate')
-                )
-
-                CampaignLocationInfo.objects.create(
+            )
+            # location
+            for d in c['showInfo']:
+                print("LOCATION", d['location'])
+                CampaignLocationInfo.objects.get_or_create(
                     campaign=campaign,
-                    address=c.get('address'),
-                    location_name=c.get('location_name'),
-                    latitude=c.get('latitude'),
-                    longitude=c.get('longitude')
+                    location_name=d['location'],
+                    defaults={
+                        'address': d.get('address'),
+                        'latitude': d.get('latitude'),
+                        'longitude': d.get('longitude')
+                    }
                 )
 
-                Category.objects.create(
-                    category_name=c.get('category_name')
-                )
+            # show_info_items = c.get('showInfo', [])
+            # for d in show_info_items:
+            #     location_name = d.get('location')
+            #     print("LOCATION:", location_name)
+            #     if location_name:
+            #         CampaignLocationInfo.objects.get_or_create(
+            #             campaign=campaign,
+            #             location_name=location_name,
+            #             defaults={
+            #                 'address': d.get('address'),
+            #                 'latitude': d.get('latitude'),
+            #                 'longitude': d.get('longitude')
+            #             }
+            #         )
 
-                Ticket.objects.create(
-                    campaign=campaign,
-                    on_sales=c.get('on_sale'),
-                    discount_info=c.get('discount_info'),
-                    price_description=c.get('price_description'),
-                    end_time=c.get('end_time')
-                )
+            Category.objects.create(
+                category_name=c.get('category_name')
+            )
 
-                # check unit type
-                for unit_type in ['showUnit', 'supportUnit', 'subUnit', 'masterUnit', 'otherUnit']:
-                    units = c.get(unit_type, [])
-                    print('UNITS:', units)
-                    if not isinstance(units, list):
-                        units = [units]
+            Ticket.objects.create(
+                campaign=campaign,
+                on_sales=c.get('on_sale'),
+                discount_info=c.get('discount_info'),
+                price_description=c.get('price_description'),
+                end_time=c.get('end_time')
+            )
 
-                    for unit_name in units:
-                        if unit_name:
-                            unit, _ = Unit.objects.get_or_create(
-                                unitname=unit_name,
-                                defaults={'unittype': unit_type}
-                            )
-                            CampaignUnitRelation.objects.get_or_create(
-                                campaign=campaign,
-                                unit=unit,
-                                defaults={'relation_type': unit_type}
-                            )
+            # check unit type
+            for unit_type in ['showUnit', 'supportUnit', 'subUnit', 'masterUnit', 'otherUnit']:
+                units = c.get(unit_type, [])
+                print('UNITS:', units)
+                if not isinstance(units, list):
+                    units = [units]
 
-                Website.objects.create(
-                    campaign=campaign,
-                    websales=c.get('websales'),
-                    sourcewebpromote=c.get('sourcewebpromote'),
-                    sourcewebname=c.get('sourcewebname')
-                )
+                for unit_name in units:
+                    if unit_name:
+                        unit, _ = Unit.objects.get_or_create(
+                            unitname=unit_name,
+                            defaults={'unittype': unit_type}
+                        )
+                        CampaignUnitRelation.objects.get_or_create(
+                            campaign=campaign,
+                            unit=unit,
+                            defaults={'relation_type': unit_type}
+                        )
+
+            Website.objects.create(
+                campaign=campaign,
+                websales=c.get('websales'),
+                sourcewebpromote=c.get('sourcewebpromote'),
+                sourcewebname=c.get('sourcewebname')
+            )
 
     except FileNotFoundError:
         print(f'The file {file_path} does not exist')
