@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ campaign.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f0f2f5; 
+            color: #333; 
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff; 
+            text-align: center; 
+            margin-bottom: 1rem; 
+            font-size: 2.5rem; 
+        }
+
+        .campaign-image {
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+
+        p, em {
+            margin: 10px 0;
+            line-height: 1.6; 
+        }
+
+        strong, em {
+            color: #007bff; 
+            font-weight: normal; 
+        }
+
+        em {
+            color: #28a745; 
+            font-style: normal; 
+        }
+
+        .info-label {
+            font-weight: 600; 
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ campaign.title }}</h1>
+    <img src="{{ campaign.image_url }}" alt="Campaign Image" class="campaign-image">
+    <p><span class="info-label">活動描述:</span> {{ campaign.description_html|safe }}</p>
+    <p><span class="info-label">註解:</span> {{ campaign.comment |default:"註解未提供"}}</p>
+    <p><span class="info-label">活動時間:</span> <em>{{ campaign.start_date }} 至 {{ campaign.end_date }}</em></p>    
+    <p><span class="info-label">地點:</span> {{ campaign.location.location_name }}</p>  
+    <p><span class="info-label">點閱數:</span> {{ campaign.hit_rate }}</p>
+</body>
+</html>

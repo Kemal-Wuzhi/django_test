@@ -10,8 +10,9 @@ from django import forms
 # from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 
-from .models import Campaign
+from .models import Campaign, CampaignLocationInfo
 from django.db import connection
+# from dao import insert_campaign_data, update_campaign_with_location_id
 from dao import insert_campaign_data
 
 
@@ -71,10 +72,27 @@ class QueryCampaignView(View):
     def get(self, request, *args, **kwargs):
         file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"
         insert_campaign_data(file_path)
+        # update_campaign_with_location_id(file_path)
         print("Data inserted!")
 
         campaigns = Campaign.objects.all()
+        # for data in campaigns:
+        #     print("DATAA:", data['locationName'])
         return render(request, 'campaign_list.html', {'campaigns': campaigns})
+
+
+class QueryCampaignDetailsView(View):
+    def get(self, request, uid, *args, **kwargs):
+        campaign = get_object_or_404(Campaign, uid=uid)
+
+        # campaign_location_info = get_object_or_404(
+        #     CampaignLocationInfo, location_id=campaign.location_id)
+
+        context = {
+            'campaign': campaign,
+            # 'campaign_location_info': campaign_location_info,
+        }
+        return render(request, 'campaign_details.html', context)
 
 
 class ModifyCampaignView(View):

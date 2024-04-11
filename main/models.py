@@ -1,15 +1,9 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavi` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
 class CampaignLocationInfo(models.Model):
     location_id = models.AutoField(db_column='LocationID', primary_key=True)
-    address = models.CharField(
+    location = models.CharField(
         db_column='Location', max_length=255, blank=True, null=True)
     location_name = models.CharField(
         db_column='LocationName', max_length=255, blank=True, null=True)
@@ -19,16 +13,7 @@ class CampaignLocationInfo(models.Model):
         db_column='Longitude', max_digits=10, decimal_places=5, blank=True, null=True)
 
     class Meta:
-        db_table = 'Campaign_Location_Info'
-
-
-class Category(models.Model):
-    category_id = models.AutoField(db_column='CategoryID', primary_key=True)
-    category_name = models.CharField(
-        db_column='CategoryName', max_length=255, blank=True, null=True)
-
-    class Meta:
-        db_table = 'Category'
+        db_table = 'CampaignLocationInfo'
 
 
 class Ticket(models.Model):
@@ -44,12 +29,25 @@ class Ticket(models.Model):
         db_table = 'Ticket'
 
 
+# the unit got showUnit ,supportUnit ,subUnit ,masterUnit
 class Unit(models.Model):
+    UNIT_TYPES = (
+        ('subUnit', 'Sub Unit'),
+        ('masterUnit', 'Master Unit'),
+        ('supportUnit', 'Support Unit'),
+        ('showUnit', 'Show Unit'),
+        ('otherUnit', 'Other Unit'),
+    )
     unitid = models.AutoField(db_column='UnitID', primary_key=True)
     unitname = models.CharField(
         db_column='UnitName', max_length=255, blank=True, null=True)
     unittype = models.CharField(
-        db_column='UnitType', max_length=255, blank=True, null=True)
+        db_column='UnitType',
+        max_length=255,
+        choices=UNIT_TYPES,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         db_table = 'Unit'
@@ -69,7 +67,8 @@ class Website(models.Model):
 
 
 class Campaign(models.Model):
-    uid = models.AutoField(db_column='UID', primary_key=True)
+    uid = models.CharField(
+        db_column='UID', max_length=255, blank=True, null=False, primary_key=True)
     version = models.CharField(
         db_column='Version', max_length=255, blank=True, null=True)
     title = models.CharField(
@@ -84,8 +83,6 @@ class Campaign(models.Model):
     start_date = models.DateField(db_column='StartDate', blank=True, null=True)
     end_date = models.DateField(db_column='EndDate', blank=True, null=True)
     hit_rate = models.IntegerField(db_column='HitRate', blank=True, null=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True, db_column="CategoryID")
     website = models.ForeignKey(
         Website, on_delete=models.SET_NULL, null=True, blank=True, db_column="WebsiteID")
     location = models.ForeignKey(

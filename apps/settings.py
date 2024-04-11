@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("BASE_DIR",BASE_DIR)
+print("BASE_DIR", BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main.apps.CampaignsConfig',
-    'apps'
+    # 'main.apps.CampaignsConfig',
+    'apps',
+    'main'
 
 ]
 
@@ -80,7 +81,7 @@ WSGI_APPLICATION = 'apps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':os.path.join(BASE_DIR,'db.sqlite3'), # BASE_DIR / '
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # BASE_DIR / '
     }
 }
 

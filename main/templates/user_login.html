@@ -1,65 +1,99 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% trans 'Log in' %}</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <div class="container mt-5">
-      <h4>{% trans 'Log in' %}</h4>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% trans 'Log in' %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"
+    crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .login-container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 350px;
+      margin: 60px auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+      border-radius: 20px;
+      padding: 20px 18px;
+      font-size: 16px;
+      background-color: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus {
+      background-color:
+        border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .btn-primary {
+      width: 100%;
+      border-radius: 20px;
+      padding: 12px 0;
+      background-color: #007bff;
+      font-size: 18px;
+      border: none;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    h4 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="login-container">
+      <h4>{% trans 'Log in' %}</h4>
       <form method="post" action="{% url 'user_login' %}">
         {% csrf_token %}
-
         <div class="form-group">
-          <label for="id_user">{% trans 'User' %}</label>
-          <input
-            type="user"
-            name="user"
-            id="id_user"
-            class="form-control"
-            placeholder="{% trans 'User' %}"
-          />
+          <label for="id_user" class="form-label">{% trans 'Username' %}</label>
+          <input type="text" name="user" id="id_user" class="form-control"
+            placeholder="{% trans 'Enter your username' %}" required autofocus>
         </div>
-
         <div class="form-group">
-          <label for="id_password">{% trans 'Password' %}</label>
-          <input
-            type="password"
-            name="password"
-            id="id_password"
-            class="form-control"
-            placeholder="{% trans 'Password' %}"
-          />
+          <label for="id_password" class="form-label">{% trans 'Password' %}</label>
+          <input type="password" name="password" id="id_password" class="form-control"
+            placeholder="{% trans 'Enter your password' %}" required>
         </div>
-
-        <button type="submit" class="btn btn-primary">
-          {% trans 'Log in' %}
-        </button>
+        <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
       </form>
-
-      <hr />
     </div>
+  </div>
 
-    <!-- Bootstrap JS, Popper.js and jQuery -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+  </script>
+</body>
+
 </html>
