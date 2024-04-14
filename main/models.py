@@ -54,12 +54,12 @@ class Unit(models.Model):
 
 
 class Website(models.Model):
-    websiteid = models.AutoField(db_column='WebsiteID', primary_key=True)
-    websales = models.CharField(
+    website_id = models.AutoField(db_column='WebsiteID', primary_key=True)
+    web_sales = models.CharField(
         db_column='WebSales', max_length=255, blank=True, null=True)
-    sourcewebpromote = models.CharField(
+    source_web_promote = models.CharField(
         db_column='SourceWebPromote', max_length=255, blank=True, null=True)
-    sourcewebname = models.CharField(
+    source_web_name = models.CharField(
         db_column='SourceWebName', max_length=255, blank=True, null=True)
 
     class Meta:
