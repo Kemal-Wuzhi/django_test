@@ -37,8 +37,8 @@
     }
 
     .form-control:focus {
-      background-color:
-        border-color: #80bdff;
+      background-color: #fff;
+      border-color: #80bdff;
       box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
 
@@ -67,6 +67,13 @@
       margin-bottom: 2rem;
       text-align: center;
     }
+
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -76,17 +83,35 @@
       <h4>{% trans 'Log in' %}</h4>
       <form method="post" action="{% url 'user_login' %}">
         {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
         <div class="form-group">
           <label for="id_user" class="form-label">{% trans 'Username' %}</label>
           <input type="text" name="user" id="id_user" class="form-control"
             placeholder="{% trans 'Enter your username' %}" required autofocus>
+          {% if form.user.errors %}
+          <div class="alert alert-danger">
+            {{ form.user.errors.as_text }}
+          </div>
+          {% endif %}
         </div>
         <div class="form-group">
           <label for="id_password" class="form-label">{% trans 'Password' %}</label>
           <input type="password" name="password" id="id_password" class="form-control"
             placeholder="{% trans 'Enter your password' %}" required>
+          {% if form.password.errors %}
+          <div class="alert alert-danger">
+            {{ form.password.errors.as_text }}
+          </div>
+          {% endif %}
         </div>
         <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
+        <button type="submit" class="btn btn-primary"><a href="{% url 'user_register' %}">{% trans 'Register' %}</a></button>
       </form>
     </div>
   </div>
