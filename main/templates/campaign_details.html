@@ -31,7 +31,7 @@
             max-width: 90%;
             height: auto;
             display: block;
-            margin: 0 auto 30px;
+            margin-bottom: 30px;
             border-radius: 12px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
@@ -49,31 +49,26 @@
             margin-right: 5px;
         }
 
-        strong,
-        em {
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        em {
-            color: #28a745;
-            font-style: italic;
-        }
-
-        .content-block {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 800px;
-        }
-
         .description-box {
             border: 2px solid #007bff;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
 
         footer {
@@ -82,24 +77,33 @@
             text-align: center;
             color: #666;
         }
+
+        .campaign-image {
+            max-width: 90%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 
 <body>
     <div class="content-block">
         <h1>{{ campaign.title }}</h1>
-        <img src="{{ campaign.image_url }}" class="campaign-image"
-            onerror="this.src='https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'">
+        <img class="campaign-image " src="{{ campaign.image_url }}" class="campaign-image"
+            onerror="this.onerror=null;this.src='https://via.placeholder.com/600';">
         <div class="description-box">
-            <p><span class="info-label">活動簡介:</span> {{ campaign.description_html|safe }}</p>
+            <p><span class="info-label">Description:</span> {{ campaign.description_html }}</p>
         </div>
-        <p><span class="info-label">活動時間:</span> <em>{{ campaign.start_date }} 至 {{ campaign.end_date }}</em></p>
-        <p><span class="info-label">地點:</span> {{ campaign.location.location_name |default:"未提供"}}</p>
-        <p><span class="info-label">票價:</span> {{ campaign.ticket.price_description |default:"未提供"  }}</p>
-        <p><span class="info-label">售票單位:</span> {{ campaign.website.source_web_name |default:"未提供" }}</p>
-        <p><span class="info-label">售票網站:</span> {{ campaign.website.source_web_promote |default:"未提供"  }}</p>
-        <p><span class="info-label">備註:</span> {{ campaign.comment |default:"未提供"}}</p>
-        <p><span class="info-label">點閱數:</span> {{ campaign.hit_rate }}</p>
+        <p><span class="info-label">Start Date:</span> {{ campaign.start_date|date:"Y-m-d" }}</p>
+        <p><span the="info-label">End Date:</span> {{ campaign.end_date|date:"Y-m-d" }}</p>
+        <p><span class="info-label">Location:</span> {{ campaign.location.location_name }}</p>
+        {% if user.is_superuser %}
+        <a href="{% url 'campaign_modify' uid=campaign.uid %}" class="btn btn-primary">Modify Details</a>
+        {% endif %}
     </div>
     <footer>© {{ current_year }} All rights reserved.</footer>
 </body>

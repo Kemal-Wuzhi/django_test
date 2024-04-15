@@ -1,11 +1,10 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% trans 'Log in' %}</title>
+  <title>{% trans 'Log In' %}</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"
     crossorigin="anonymous">
   <style>
@@ -48,17 +47,39 @@
     }
 
     .btn-primary {
-      width: 100%;
+      width: 48%;
       border-radius: 20px;
       padding: 12px 0;
       background-color: #007bff;
       font-size: 18px;
       border: none;
       transition: background-color 0.2s ease-in-out;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .btn-primary:hover {
       background-color: #0056b3;
+    }
+
+    .btn-secondary {
+      width: 48%;
+      border-radius: 20px;
+      padding: 12px 0;
+      background-color: #6c757d;
+      font-size: 18px;
+      border: none;
+      transition: background-color 0.2s;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
     }
 
     h4 {
@@ -74,13 +95,18 @@
       border-color: #f5c6cb;
       text-align: center;
     }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="login-container">
-      <h4>{% trans 'Log in' %}</h4>
+      <h4>{% trans 'Log In' %}</h4>
       <form method="post" action="{% url 'user_login' %}">
         {% csrf_token %}
         {% if form.non_field_errors %}
@@ -91,7 +117,7 @@
         </div>
         {% endif %}
         <div class="form-group">
-          <label for="id_user" class="form-label">{% trans 'Username' %}</label>
+          <label for="id_user" class="form-label">{% trans 'UserName' %}</label>
           <input type="text" name="user" id="id_user" class="form-control"
             placeholder="{% trans 'Enter your username' %}" required autofocus>
           {% if form.user.errors %}
@@ -101,7 +127,7 @@
           {% endif %}
         </div>
         <div class="form-group">
-          <label for="id_password" class="form-label">{% trans 'Password' %}</label>
+          <label for="id_password" class="form-label">{% trans 'PassWord' %}</label>
           <input type="password" name="password" id="id_password" class="form-control"
             placeholder="{% trans 'Enter your password' %}" required>
           {% if form.password.errors %}
@@ -110,8 +136,10 @@
           </div>
           {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
-        <button type="submit" class="btn btn-primary"><a href="{% url 'user_register' %}">{% trans 'Register' %}</a></button>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">{% trans 'Log In' %}</button>
+          <a href="{% url 'user_register' %}" class="btn btn-secondary">{% trans 'Register' %}</a>
+        </div>
       </form>
     </div>
   </div>

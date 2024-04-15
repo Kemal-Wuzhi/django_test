@@ -9,7 +9,7 @@ urlpatterns = [
     path('operation/campaigns/', QueryCampaignView.as_view(), name='campaign_list'),
     path('operation/campaign/details/<str:uid>/',
          QueryCampaignDetailsView.as_view(), name='campaign_details'),
-    path('operation/campaign/modify/<int:id>/',
-         ModifyCampaignView.as_view(), name='modify_campaign'),
+    path('operation/campaign/modify/<str:uid>/',
+         ModifyCampaignView.as_view(), name='campaign_modify'),
 
 ]

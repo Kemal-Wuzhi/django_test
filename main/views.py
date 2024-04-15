@@ -5,14 +5,12 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme as is_safe_url
 from django.views.generic import FormView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse
 from django.views import View
 from django import forms
-
 # from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
-
 from .models import Campaign, CampaignLocationInfo
 from django.db import connection
 from dao import insert_campaign_data, update_campaign_with_location_id, update_campaign_with_ticket_id, update_campaign_with_website_id
@@ -53,7 +51,8 @@ class RegisterView(FormView):
         return redirect(reverse('campaign_list'))
 
     def form_invalid(self, form):
-        return redirect(reverse('user_login'))
+        # render the same form with errors
+        return render(self.request, self.template_name, {'form': form})
 
 
 class LogInView(FormView):
@@ -117,16 +116,34 @@ class QueryCampaignDetailsView(View):
 
         context = {
             'campaign': campaign,
-
         }
+
         return render(request, 'campaign_details.html', context)
 
 
 class ModifyCampaignView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return HttpResponseForbidden("You are not authorized to access this page.")
+
+        campaign_uid = kwargs.get('uid')
+        campaign = get_object_or_404(
+            Campaign, uid=campaign_uid)
+        return render(request, 'campaign_modify.html', {'campaign': campaign})
+
     def post(self, request, *args, **kwargs):
-        campaign_id = kwargs.get('id')
-        campaign = get_object_or_404(Campaign, uid=campaign_id)
-        new_title = request.POST.get('title', campaign.title)
-        campaign.title = new_title
+        if not request.user.is_superuser:
+            return HttpResponseForbidden("You are not authorized to modify this campaign.")
+
+        campaign_uid = kwargs.get('uid')
+        campaign = get_object_or_404(Campaign, uid=campaign_uid)
+        campaign.title = request.POST.get('title', campaign.title)
+        campaign.description = request.POST.get(
+            'description', campaign.description)
+        campaign.start_date = request.POST.get(
+            'start_date', campaign.start_date)
+        campaign.end_date = request.POST.get('end_date', campaign.end_date)
+        campaign.location = request.POST.get('location', campaign.location)
         campaign.save()
-        return HttpResponse(f"活動 {campaign_id} 的標題已更新為 {new_title}")
+
+        return redirect('campaign_details', uid=campaign_uid)
