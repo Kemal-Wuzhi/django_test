@@ -98,11 +98,11 @@ class DeleteCampaignView(View):
 
 class QueryCampaignView(View):
     def get(self, request, *args, **kwargs):
-        file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"
-        insert_campaign_data(file_path)
-        update_campaign_with_location_id(file_path)
-        update_campaign_with_ticket_id(file_path)
-        update_campaign_with_website_id(file_path)
+        # file_path = "/Users/kemal-wu/Desktop/d_test/music_data.json"
+        # insert_campaign_data(file_path)
+        # update_campaign_with_location_id(file_path)
+        # update_campaign_with_ticket_id(file_path)
+        # update_campaign_with_website_id(file_path)
         print("Data inserted!")
 
         campaigns = Campaign.objects.all()
@@ -138,12 +138,19 @@ class ModifyCampaignView(View):
         campaign_uid = kwargs.get('uid')
         campaign = get_object_or_404(Campaign, uid=campaign_uid)
         campaign.title = request.POST.get('title', campaign.title)
-        campaign.description = request.POST.get(
-            'description', campaign.description)
+        campaign.description_html = request.POST.get(
+            'description', campaign.description_html)
         campaign.start_date = request.POST.get(
             'start_date', campaign.start_date)
         campaign.end_date = request.POST.get('end_date', campaign.end_date)
-        campaign.location = request.POST.get('location', campaign.location)
+        # campaign.location = request.POST.get('location', campaign.location)
+        location_name = request.POST.get('location', None)
+        if location_name:
+            location, created = CampaignLocationInfo.objects.get_or_create(
+                location_name=location_name)
+            campaign.location = location
+        else:
+            campaign.location = None
         campaign.save()
 
         return redirect('campaign_details', uid=campaign_uid)

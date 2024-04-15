@@ -93,13 +93,13 @@
 <body>
     <div class="content-block">
         <h1>{{ campaign.title }}</h1>
-        <img class="campaign-image " src="{{ campaign.image_url }}" class="campaign-image"
+        <img src="{{ campaign.image_url }}" class="campaign-image"
             onerror="this.onerror=null;this.src='https://via.placeholder.com/600';">
         <div class="description-box">
             <p><span class="info-label">Description:</span> {{ campaign.description_html }}</p>
         </div>
         <p><span class="info-label">Start Date:</span> {{ campaign.start_date|date:"Y-m-d" }}</p>
-        <p><span the="info-label">End Date:</span> {{ campaign.end_date|date:"Y-m-d" }}</p>
+        <p><span class="info-label">End Date:</span> {{ campaign.end_date|date:"Y-m-d" }}</p>
         <p><span class="info-label">Location:</span> {{ campaign.location.location_name }}</p>
         {% if user.is_superuser %}
         <a href="{% url 'campaign_modify' uid=campaign.uid %}" class="btn btn-primary">Modify Details</a>
